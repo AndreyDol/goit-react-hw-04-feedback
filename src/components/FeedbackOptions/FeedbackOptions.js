@@ -8,6 +8,7 @@ export const FeedbackOptions = ({ options, onLeaveFeedback }) => {
       type="button"
       key={option}
       onClick={() => onLeaveFeedback(option)}
+      option={option}
     >
       {option}
     </ButtonHover>

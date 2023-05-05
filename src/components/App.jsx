@@ -1,44 +1,43 @@
-import { Component } from 'react';
+//import { Component } from 'react';
 import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 import { Statistics } from './Statistics/Statistics';
 import { ButtonWrap } from './ButtonWrap.styled';
 import { Section } from './Section/Section';
-export class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
+import { useState } from 'react';
+
+export const App =()=> {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  const feedbackCounter = option => {
+    if (option === 'good') setGood(prevState => prevState + 1);
+    if (option === 'neutral') setNeutral(prevState => prevState + 1);
+    if (option === 'bad') setBad(prevState => prevState + 1);
   };
 
-  feedbackCounter = option => {
-    this.setState({
-      [option]: this.state[option] + 1,
-    });
-  };
 
-  countTotalFeedback = () =>
-    this.state.good + this.state.neutral + this.state.bad;
+  const countTotalFeedback = () =>
+    good + neutral + bad;
 
-  countPositiveFeedbackPercentage = () => {
-    return this.state.good + this.state.neutral + this.state.bad === 0
+  const countPositiveFeedbackPercentage = () => {
+    return (good + neutral + bad) === 0
       ? 0
       : Math.round(
-          (this.state.good /
-            (this.state.good + this.state.neutral + this.state.bad)) *
+          (good /
+            (good + neutral + bad)) *
             100
         );
   };
 
-  render() {
-    const { good, neutral, bad } = this.state;
-
+ 
     return (
       <div>
         <Section title="Please leave feedback">
           <ButtonWrap>
             <FeedbackOptions
-              options={Object.keys(this.state)}
-              onLeaveFeedback={this.feedbackCounter}
+              options={Object.keys({ good, neutral, bad })}
+              onLeaveFeedback={feedbackCounter}
             />
           </ButtonWrap>
         </Section>
@@ -47,10 +46,10 @@ export class App extends Component {
           good={good}
           neutral={neutral}
           bad={bad}
-          total={this.countTotalFeedback(this.state)}
-          positivePercentage={this.countPositiveFeedbackPercentage(this.state)}
+          total={countTotalFeedback()}
+          positivePercentage={countPositiveFeedbackPercentage()}
         ></Statistics>
       </div>
     );
   }
-}
+
